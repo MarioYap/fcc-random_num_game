@@ -17,7 +17,7 @@ else
   echo -e "\nWelcome back, $USERNAME! You have played $PLAY_COUNT games, and your best game took $BEST_COUNT guesses."
 fi
 
-NUMBER=$(( RANDOM % 1000 + 1 ))
+NUMBER=$(( $RANDOM % 1000 + 1 ))
 USER_ID=$($PSQL "SELECT user_id FROM users WHERE username = '$ENTRY_NAME'")
 
 echo -e "\nGuess the secret number between 1 and 1000:"
@@ -29,7 +29,10 @@ do
   (( I++ ))
   read INPUT_GUESS
   
-  if [[ $INPUT_GUESS > $NUMBER ]]
+  if [[ ! $INPUT_GUESS =~ ^[0-9]+$ ]]
+  then
+    echo "That is not an integer, guess again:"
+  elif [[ $INPUT_GUESS > $NUMBER ]]
   then
     echo "It's higher than that, guess again:"
   elif [[ $INPUT_GUESS < $NUMBER ]]
